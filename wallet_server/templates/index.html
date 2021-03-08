@@ -43,11 +43,11 @@
                     data: JSON.stringify(transaction_data),
                     success: function (response) {
                         console.info(response)
-                        if($.parseJSON(response).message == 'fail') {
-                            alert('failed')
-                            return
-                        }
+                        if(response.message == 'fail') {
+                            alert('Send fail')
+                        } else {
                         alert('Send success')
+                        }
                     },
                     error: function (error) {
                         console.error(error)
@@ -55,6 +55,29 @@
                     }
                 });
             })
+
+            function reload_amount() {
+                let data = {'blockchain_address': $('#blockchain_address').val()}
+                $.ajax({
+                    type: "GET",
+                    url: "/wallet/amount",
+                    data: data,
+                    success: function (response) {
+                        let amount = response['amount']
+                        $('#wallet_amount').text(amount)
+                        console.info(amount)
+                    },
+                    error: function (error) {
+                        console.error(error)
+                    }
+                });
+            }
+
+            // $('#reload_wallet').on('click', function () {
+            //     reload_amount()
+            // })
+
+            setInterval(reload_amount, 3000)
         })
     </script>
 </head>
@@ -63,7 +86,7 @@
     <div>
         <h1>Wallet</h1>
         <div id="wallet_amount">0</div>
-        <button id="reload_wallet">Reload Wallet</button>
+        <!-- <button id="reload_wallet">Reload Wallet</button> -->
 
         <p>Public  Key</p>
         <textarea id="public_key" rows="2" cols="100"></textarea>
